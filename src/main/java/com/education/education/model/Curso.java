@@ -19,6 +19,9 @@ public class Curso {
     @Column(length = 100)
     private String codigo;
 
+    @Column
+    private Integer carga_horaria;
+
     public Integer getId() {
         return id;
     }
@@ -50,8 +53,4 @@ public class Curso {
     public void setCarga_horaria(Integer carga_horaria) {
         this.carga_horaria = carga_horaria;
     }
-
-    @Column
-    private Integer carga_horaria;
-
 }
