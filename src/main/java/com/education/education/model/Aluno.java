@@ -12,13 +12,13 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(length = 100)
     private String nome;
 
-    @Column
+    @Column(length = 100)
     private String email;
 
-    @Column
+    @Column(length = 20)
     private String matricula;
 
     @Column
