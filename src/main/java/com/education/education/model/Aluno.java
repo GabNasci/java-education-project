@@ -1,8 +1,11 @@
 package com.education.education.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "alunos")
@@ -20,6 +23,10 @@ public class Aluno {
 
     @Column(length = 20)
     private String matricula;
+
+    @OneToMany(mappedBy = "aluno",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("aluno")
+    private List<Matricula> matriculas;
 
     @Column
     private Date data_nascimento;
@@ -62,6 +69,21 @@ public class Aluno {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
+    }
+
+    public void addMatricula(Matricula matricula) {
+        if(this.matriculas == null) {
+            this.matriculas = new ArrayList<>();
+        }
+        this.matriculas.add(matricula);
     }
 }
 

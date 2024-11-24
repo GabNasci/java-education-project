@@ -2,7 +2,11 @@ package com.education.education.controller;
 
 import com.education.education.dto.AlunoRequestDTO;
 import com.education.education.model.Aluno;
+import com.education.education.model.Matricula;
+import com.education.education.model.Turma;
 import com.education.education.repository.AlunoRepository;
+import com.education.education.repository.MatriculaRepository;
+import com.education.education.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +18,12 @@ public class AlunoController {
 
     @Autowired
     private AlunoRepository repository;
+
+    @Autowired
+    private MatriculaRepository matriculaRepository;
+
+    @Autowired
+    private TurmaRepository turmaRepository;
 
     @GetMapping
     public List<Aluno> finAll() {
@@ -56,6 +66,30 @@ public class AlunoController {
                 .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado."));
 
         this.repository.delete(aluno);
+    }
+
+    @PostMapping("/{aluno_id}/matricula")
+    public Aluno addMatricula(@PathVariable Integer aluno_id, @RequestBody Integer turma_id ) {
+        Aluno aluno = this.repository.findById(aluno_id)
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado."));
+        Turma turma = this.turmaRepository.findById(turma_id)
+                .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada."));
+
+        Matricula matricula = new Matricula();
+        matricula.setAluno(aluno);
+        matricula.setTurma(turma);
+
+        boolean matriculaJaExiste = aluno.getMatriculas().stream()
+                .anyMatch(m -> m.getTurma().getId().equals(turma_id));
+
+        if (!matriculaJaExiste) {
+            aluno.addMatricula(matricula);
+        } else {
+            throw new IllegalArgumentException("O aluno já está matriculado nesta turma.");
+        }
+
+        return this.repository.save(aluno);
+
     }
 
 

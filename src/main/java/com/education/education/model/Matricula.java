@@ -13,11 +13,11 @@ public class Matricula {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "aluno_id", referencedColumnName = "id")
     private Aluno aluno;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "turma_id", referencedColumnName = "id")
     private Turma turma;
 
