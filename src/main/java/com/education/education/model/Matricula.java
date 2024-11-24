@@ -1,7 +1,9 @@
 package com.education.education.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -20,6 +22,18 @@ public class Matricula {
     @ManyToOne
     @JoinColumn(name = "turma_id", referencedColumnName = "id")
     private Turma turma;
+
+    @OneToMany(mappedBy = "matricula",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("matricula")
+    private List<Nota> notas;
+
+    public List<Nota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<Nota> notas) {
+        this.notas = notas;
+    }
 
     public Integer getId() {
         return id;

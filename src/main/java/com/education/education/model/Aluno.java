@@ -3,6 +3,7 @@ package com.education.education.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Aluno {
     private List<Matricula> matriculas;
 
     @Column
-    private Date data_nascimento;
+    private LocalDate data_nascimento;
 
     public String getMatricula() {
         return matricula;
@@ -39,11 +40,11 @@ public class Aluno {
         this.matricula = matricula;
     }
 
-    public Date getData_nascimento() {
+    public LocalDate getData_nascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(Date data_nascimento) {
+    public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
 
