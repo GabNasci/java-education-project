@@ -50,7 +50,7 @@ public class DisciplinaController {
         disciplina.setCurso(curso);
 
         Professor professor = this.professorRepository.findById(dto.professor_id())
-                .orElseThrow(() -> new IllegalArgumentException("professor não encontrado."));
+                .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
 
         disciplina.setProfessor(professor);
 
@@ -71,7 +71,7 @@ public class DisciplinaController {
         disciplina.setCurso(curso);
 
         Professor professor = this.professorRepository.findById(dto.professor_id())
-                .orElseThrow(() -> new IllegalArgumentException("professor não encontrado."));
+                .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
 
         disciplina.setProfessor(professor);
 
