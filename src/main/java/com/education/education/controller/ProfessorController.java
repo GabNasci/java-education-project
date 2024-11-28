@@ -4,6 +4,7 @@ import com.education.education.dto.ProfessorRequestDTO;
 import com.education.education.model.Professor;
 import com.education.education.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,29 +17,35 @@ public class ProfessorController {
     private ProfessorRepository repository;
 
     @GetMapping
-    public List<Professor> finAll() {
-        return this.repository.findAll();
+    public ResponseEntity<List<Professor>> finAll() {
+        List<Professor> professor = this.repository.findAll();
+
+        return ResponseEntity.ok(professor);
     }
 
     @GetMapping("/{id}")
-    public Professor findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
+    public ResponseEntity<Professor> findById(@PathVariable Integer id) {
+        Professor professor = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
+
+        return ResponseEntity.ok(professor);
     }
 
     @PostMapping
-    public Professor save(@RequestBody ProfessorRequestDTO dto) {
+    public ResponseEntity<Professor> save(@RequestBody ProfessorRequestDTO dto) {
         Professor professor = new Professor();
         professor.setNome(dto.nome());
         professor.setEmail(dto.email());
         professor.setEspecialidade(dto.especialidade());
         professor.setTelefone(dto.telefone());
 
-        return this.repository.save(professor);
+        Professor savedProfessor = this.repository.save(professor);
+
+        return ResponseEntity.ok(savedProfessor);
     }
 
     @PutMapping("/{id}")
-    public Professor update(@PathVariable Integer id, @RequestBody ProfessorRequestDTO dto) {
+    public ResponseEntity<Professor> update(@PathVariable Integer id, @RequestBody ProfessorRequestDTO dto) {
         Professor professor = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
 
@@ -47,14 +54,16 @@ public class ProfessorController {
         professor.setEspecialidade(dto.especialidade());
         professor.setTelefone(dto.telefone());
 
-        return this.repository.save(professor);
+        Professor savedProfessor = this.repository.save(professor);
+        return ResponseEntity.ok(savedProfessor);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Professor professor = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
 
         this.repository.delete(professor);
+        return ResponseEntity.noContent().build();
     }
 }

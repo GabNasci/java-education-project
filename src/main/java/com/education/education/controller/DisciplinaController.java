@@ -9,6 +9,7 @@ import com.education.education.repository.CursoRepository;
 import com.education.education.repository.DisciplinaRepository;
 import com.education.education.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,18 +28,21 @@ public class DisciplinaController {
     private ProfessorRepository professorRepository;
 
     @GetMapping
-    public List<Disciplina> findAll() {
-        return this.repository.findAll();
+    public ResponseEntity<List<Disciplina>> findAll() {
+        List<Disciplina> disciplinas = this.repository.findAll();
+        return ResponseEntity.ok(disciplinas);
     }
 
     @GetMapping("/{id}")
-    public Disciplina findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
+    public ResponseEntity<Disciplina> findById(@PathVariable Integer id) {
+        Disciplina disciplina = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Disciplina não encontrado."));
+
+        return ResponseEntity.ok(disciplina);
     }
 
     @PostMapping
-    public Disciplina save(@RequestBody DisciplinaRequestDTO dto) {
+    public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequestDTO dto) {
         Disciplina disciplina = new Disciplina();
 
         disciplina.setNome(dto.nome());
@@ -54,11 +58,13 @@ public class DisciplinaController {
 
         disciplina.setProfessor(professor);
 
-        return this.repository.save(disciplina);
+        Disciplina savedDisciplina = this.repository.save(disciplina);
+
+        return ResponseEntity.ok(savedDisciplina);
     }
 
     @PutMapping("/{id}")
-    public Disciplina update(@PathVariable Integer id, @RequestBody DisciplinaRequestDTO dto) {
+    public ResponseEntity<Disciplina> update(@PathVariable Integer id, @RequestBody DisciplinaRequestDTO dto) {
         Disciplina disciplina = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Disciplina não encontrado."));
 
@@ -74,16 +80,18 @@ public class DisciplinaController {
                 .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado."));
 
         disciplina.setProfessor(professor);
+        Disciplina savedDisciplina = this.repository.save(disciplina);
 
-        return this.repository.save(disciplina);
+        return ResponseEntity.ok(savedDisciplina);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Disciplina disciplina = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Disciplina não encontrado."));
 
         this.repository.delete(disciplina);
+        return ResponseEntity.noContent().build();
     }
     
 }

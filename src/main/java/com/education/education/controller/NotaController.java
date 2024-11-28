@@ -7,6 +7,7 @@ import com.education.education.repository.DisciplinaRepository;
 import com.education.education.repository.MatriculaRepository;
 import com.education.education.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,18 +26,20 @@ public class NotaController {
     DisciplinaRepository disciplinaRepository;
 
     @GetMapping
-    public List<Nota> finAll() {
-        return this.repository.findAll();
+    public ResponseEntity<List<Nota>> finAll() {
+        List<Nota> notas =  this.repository.findAll();
+        return ResponseEntity.ok(notas);
     }
 
     @GetMapping("/{id}")
-    public Nota findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
+    public ResponseEntity<Nota> findById(@PathVariable Integer id) {
+        Nota nota = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Nota não encontrada."));
+        return ResponseEntity.ok(nota);
     }
 
     @PostMapping
-    public Nota save(@RequestBody NotaRequestDTO dto) {
+    public ResponseEntity<Nota> save(@RequestBody NotaRequestDTO dto) {
         Nota nota = new Nota();
 
         nota.setNota(dto.nota());
@@ -52,11 +55,13 @@ public class NotaController {
 
         nota.setDisciplina(disciplina);
 
-        return this.repository.save(nota);
+        Nota savedNota = this.repository.save(nota);
+
+        return ResponseEntity.ok(savedNota);
     }
 
     @PutMapping("/{id}")
-    public Nota update(@PathVariable Integer id, @RequestBody NotaRequestDTO dto) {
+    public ResponseEntity<Nota> update(@PathVariable Integer id, @RequestBody NotaRequestDTO dto) {
         Nota nota = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Nota não encontrada."));
 
@@ -73,15 +78,18 @@ public class NotaController {
 
         nota.setDisciplina(disciplina);
 
-        return this.repository.save(nota);
+        Nota savedNota = this.repository.save(nota);
+
+        return ResponseEntity.ok(savedNota);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Nota nota = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Nota não encontrada."));
 
         this.repository.delete(nota);
+        return ResponseEntity.noContent().build();
     }
     
 }

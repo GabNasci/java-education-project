@@ -10,6 +10,7 @@ import com.education.education.repository.MatriculaRepository;
 import com.education.education.repository.MatriculaRepository;
 import com.education.education.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,18 +29,21 @@ public class MatriculaController {
     TurmaRepository turmaRepository;
 
     @GetMapping
-    public List<Matricula> finAll() {
-        return this.repository.findAll();
+    public ResponseEntity<List<Matricula>> finAll() {
+        List<Matricula> matriculas = this.repository.findAll();
+        return ResponseEntity.ok(matriculas);
     }
 
     @GetMapping("/{id}")
-    public Matricula findById(@PathVariable Integer id) {
-        return this.repository.findById(id)
+    public ResponseEntity<Matricula> findById(@PathVariable Integer id) {
+        Matricula matricula = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Matricula não encontrada."));
+
+        return ResponseEntity.ok(matricula);
     }
 
     @PostMapping
-    public Matricula save(@RequestBody MatriculaRequestDTO dto) {
+    public ResponseEntity<Matricula> save(@RequestBody MatriculaRequestDTO dto) {
         Matricula matricula = new Matricula();
 
         Aluno aluno = this.alunoRepository.findById(dto.aluno_id())
@@ -52,11 +56,13 @@ public class MatriculaController {
 
         matricula.setTurma(turma);
 
-        return this.repository.save(matricula);
+        Matricula savedMatricula = this.repository.save(matricula);
+
+        return ResponseEntity.ok(savedMatricula);
     }
 
     @PutMapping("/{id}")
-    public Matricula update(@PathVariable Integer id, @RequestBody MatriculaRequestDTO dto) {
+    public ResponseEntity<Matricula> update(@PathVariable Integer id, @RequestBody MatriculaRequestDTO dto) {
         Matricula matricula = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Matricula não encontrada."));
 
@@ -69,15 +75,17 @@ public class MatriculaController {
                 .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada."));
 
         matricula.setTurma(turma);
+        Matricula savedMatricula = this.repository.save(matricula);
 
-        return this.repository.save(matricula);
+        return ResponseEntity.ok(savedMatricula);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Matricula matricula = this.repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Matricula não encontrada."));
 
         this.repository.delete(matricula);
+        return ResponseEntity.noContent().build();
     }
 }
