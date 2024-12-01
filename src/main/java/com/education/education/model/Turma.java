@@ -1,6 +1,9 @@
 package com.education.education.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "turmas")
@@ -19,6 +22,18 @@ public class Turma {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "curso_id", referencedColumnName = "id")
     private Curso curso;
+
+    @OneToMany(mappedBy = "turma",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("turma")
+    private List<Matricula> matriculas;
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
+    }
 
     public Integer getId() {
         return id;

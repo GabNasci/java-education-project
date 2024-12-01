@@ -4,14 +4,17 @@ package com.education.education.controller;
 import com.education.education.dto.DisciplinaRequestDTO;
 import com.education.education.model.Curso;
 import com.education.education.model.Disciplina;
+import com.education.education.model.Nota;
 import com.education.education.model.Professor;
 import com.education.education.repository.CursoRepository;
 import com.education.education.repository.DisciplinaRepository;
+import com.education.education.repository.NotaRepository;
 import com.education.education.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +29,9 @@ public class DisciplinaController {
 
     @Autowired
     private ProfessorRepository professorRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     @GetMapping
     public ResponseEntity<List<Disciplina>> findAll() {
@@ -83,6 +89,16 @@ public class DisciplinaController {
         Disciplina savedDisciplina = this.repository.save(disciplina);
 
         return ResponseEntity.ok(savedDisciplina);
+    }
+
+    @GetMapping("/{id}/notas")
+    public ResponseEntity<List<Nota>> getNotas(@PathVariable Integer id) {
+        Disciplina disciplina = this.repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Disciplina não encontrado."));
+
+        List<Nota> notas = this.notaRepository.findByDisciplina(disciplina);
+
+        return ResponseEntity.ok(notas);
     }
 
     @DeleteMapping("/{id}")

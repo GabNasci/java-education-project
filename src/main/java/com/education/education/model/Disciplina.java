@@ -9,7 +9,10 @@ package com.education.education.model;
 //foreign key (curso_id) references cursos(id),
 //foreign key (professor_id) references professores(id)
 //        );
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 
 @Entity
@@ -33,6 +36,18 @@ public class Disciplina {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id", referencedColumnName = "id")
     private Professor professor;
+
+//    @OneToMany(mappedBy = "disciplina",cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnoreProperties("disciplina")
+//    private List<Nota> notas;
+//
+//    public List<Nota> getNotas() {
+//        return notas;
+//    }
+//
+//    public void setNotas(List<Nota> notas) {
+//        this.notas = notas;
+//    }
 
     public Integer getId() {
         return id;

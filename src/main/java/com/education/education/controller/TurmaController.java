@@ -1,14 +1,17 @@
 package com.education.education.controller;
 
+import com.education.education.dto.NotaResponseDTO;
 import com.education.education.dto.TurmaRequestDTO;
 import com.education.education.model.Curso;
+import com.education.education.model.Matricula;
+import com.education.education.model.Nota;
 import com.education.education.model.Turma;
-import com.education.education.repository.CursoRepository;
-import com.education.education.repository.TurmaRepository;
+import com.education.education.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,15 @@ public class TurmaController {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
+
+    @Autowired
+    MatriculaRepository matriculaRepository;
+
+    @Autowired
+    AlunoRepository alunoRepository;
 
     @GetMapping
     public ResponseEntity<List<Turma>> finAll() {
@@ -65,6 +77,19 @@ public class TurmaController {
         Turma savedTurma = this.repository.save(turma);
 
         return ResponseEntity.ok(savedTurma);
+    }
+
+    @GetMapping("/{id}/notas")
+    public ResponseEntity<List<Nota>> getNotes(@PathVariable Integer id) {
+        Turma turma = this.repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Turma não encontrado."));
+
+        List<Nota> notas = new ArrayList<>();
+        for(Matricula matricula : turma.getMatriculas()) {
+            notas.addAll(matricula.getNotas());
+        }
+
+        return ResponseEntity.ok(notas);
     }
 
     @DeleteMapping("/{id}")

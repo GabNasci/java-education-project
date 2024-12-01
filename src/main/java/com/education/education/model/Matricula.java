@@ -17,10 +17,12 @@ public class Matricula {
 
     @ManyToOne
     @JoinColumn(name = "aluno_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("matriculas")
     private Aluno aluno;
 
     @ManyToOne
     @JoinColumn(name = "turma_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("matriculas")
     private Turma turma;
 
     @OneToMany(mappedBy = "matricula",cascade = CascadeType.ALL, orphanRemoval = true)

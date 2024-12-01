@@ -22,6 +22,7 @@ public class Nota {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "matricula_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("notas")
     private Matricula matricula;
 
     @ManyToOne(fetch = FetchType.EAGER)
