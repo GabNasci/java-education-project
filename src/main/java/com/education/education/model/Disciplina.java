@@ -1,14 +1,4 @@
 package com.education.education.model;
-
-//create table disciplinas (
-//        id int not null primary key auto_increment,
-//        nome varchar(100),
-//        codigo varchar(20),
-//        curso_id int not null,
-//        professor_id int not null,
-//foreign key (curso_id) references cursos(id),
-//foreign key (professor_id) references professores(id)
-//        );
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -36,18 +26,6 @@ public class Disciplina {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id", referencedColumnName = "id")
     private Professor professor;
-
-//    @OneToMany(mappedBy = "disciplina",cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonIgnoreProperties("disciplina")
-//    private List<Nota> notas;
-//
-//    public List<Nota> getNotas() {
-//        return notas;
-//    }
-//
-//    public void setNotas(List<Nota> notas) {
-//        this.notas = notas;
-//    }
 
     public Integer getId() {
         return id;
